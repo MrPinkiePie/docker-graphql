@@ -25,16 +25,19 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build -t mauriciostornaiuolo/docker-graphql:0.0.2 .
+        docker build -t mauriciostornaiuolo/docker-graphql:$NEW_VERSION .
         docker build -t mauriciostornaiuolo/docker-graphql:latest .
     - name: Push Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker push mauriciostornaiuolo/docker-graphql:0.0.2
+        docker push mauriciostornaiuolo/docker-graphql:$NEW_VERSION
         docker push mauriciostornaiuolo/docker-graphql:latest
         
   #  - name: Build the Docker image
